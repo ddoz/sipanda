@@ -14,9 +14,19 @@ import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, Tabl
 import { useRouter } from 'next/navigation'
 import { DatePicker, DatePickerInput } from '@mantine/dates';
 import { formatPrice, getFormattedDate, getFormattedDateOnly, getFormattedDateShort, getFormattedDateTime } from '@/lib/utils'
+import { updateHarga } from '@/services/harga-pasar';
 
 const HargaPasar = ({ data, pangan, pasar, awal, akhir }:{data:any[],pangan:any[],pasar:any[], awal:any, akhir:any}) => {
     const [value, setValue] = useState<[Date | null, Date | null]>([awal, akhir]);
+
+    const [inputValues, setInputValues] = useState({});
+
+    const handleInputChange = (panganId, pasarId, dateKey, value) => {
+      setInputValues((prevInputs) => ({
+        ...prevInputs,
+        [`${panganId}-${pasarId}-${dateKey}`]: value,
+      }));
+    };
    
     const router = useRouter();
 
@@ -75,6 +85,40 @@ const SetInfoTipe = (tipe:string) => {
       return '-';
   }
 }
+
+const handleUpdateHarga = async (panganId, pasarId, dateKey, newPrice) => {
+  try {
+    const response = await updateHarga({
+      panganId,
+      pasarId,
+      date: dateKey,
+      harga: newPrice,
+    });
+
+    if(response.status) {
+      notifications.show({
+        title: 'Berhasil',
+        message: 'Harga berhasil diupdate.',
+        color:'success'
+      });
+      revalidatePath(`/get-panel/harga-pasar`);
+    }else {
+      notifications.show({
+        title: 'Gagal',
+        message: 'Gagal mengupdate harga.',
+        color:'red'
+      });
+    }
+  } catch (error) {
+    notifications.show({
+      title: 'Gagal',
+      message: 'Gagal mengupdate harga.',
+      color:'red'
+    });
+    
+    console.error('Error updating harga:', error);
+  }
+};
 
   return (
     <Card className='w-full'>
@@ -136,7 +180,7 @@ const SetInfoTipe = (tipe:string) => {
                           return (
                               <TableCell key={dateIndex}>
                                   <div className='flex flex-col items-center gap-1'>
-                                      {(todayDate == dateKey) && <TextInput placeholder='Input Harga' />}
+                                      {(todayDate == dateKey) && <TextInput placeholder='Input Harga' onChange={(e) => handleInputChange(panganItem.id, pasarItem.id, dateKey, e.target.value)} />}
                                       <h1 className='font-bold text-md'>{formatPrice(harga.toString())}</h1>
                                       {SetInfoTipe(tipe)}
                                   </div>
@@ -145,7 +189,17 @@ const SetInfoTipe = (tipe:string) => {
                       })}
                       {pasarIndex === 0 && (
                         <TableCell rowSpan={pasar.length} className="text-right">
-                          <Button leftSection={<IconSend /> } size='sm' variant='filled' className='bg-blue-500'>Update Harga</Button>
+                          <Button leftSection={<IconSend /> } size='sm' variant='filled' className='bg-blue-500' onClick={() => {
+                            // Update prices for all inputs
+                            dateArray.forEach((date) => {
+                              const dateKey = getFormattedDateShort(date.toISOString());
+                              const inputValue = inputValues[`${panganItem.id}-${pasarItem.id}-${dateKey}`];
+
+                              if (inputValue) {
+                                handleUpdateHarga(panganItem.id, pasarItem.id, dateKey, inputValue);
+                              }
+                            });
+                          }}>Update Harga</Button>
                         </TableCell>
                       )}
                     </TableRow>
