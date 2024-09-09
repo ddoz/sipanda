@@ -178,7 +178,7 @@ enum TipeHarga {
 
 model HargaPasar {
   id         Int       @id @default(autoincrement())
-  tanggal    DateTime  @db.Date
+  tanggal    DateTime
   pangan     Pangan    @relation(fields: [panganId], references: [id])
   pasar      Pasar     @relation(fields: [pasarId], references: [id])
   user       User      @relation(fields: [userId], references: [id])
