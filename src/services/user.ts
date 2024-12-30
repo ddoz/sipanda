@@ -51,3 +51,23 @@ export async function deleteUser({
     revalidatePath('/backend/users', 'page');
     return true;
 }
+
+export async function updateUser({
+    id,
+    password,
+}:{
+    id: any,
+    password: string,
+}){
+    console.log(id)
+    const sa = await prisma.user.update({
+        where: {
+            id: parseInt(id),
+        },
+        data: {
+            password: await hash(password, 10),
+        },
+    });
+    revalidatePath("/get-panel/profil");
+    return sa;
+}

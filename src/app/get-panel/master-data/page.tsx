@@ -3,9 +3,11 @@ import { getKategoriPangan, getPasar } from '@/services/master-data';
 
 import KategoriPangan from './kategori-pangan';
 import Pasar from './pasar';
+import SitePage from './site';
+import { getSite } from '@/services/site';
 
 export default async function MasteDataPage() {
-  const [dataKategoriPangan, dataPasar] = await Promise.all([getKategoriPangan(), getPasar()]);
+  const [dataKategoriPangan, dataPasar, dataSite] = await Promise.all([getKategoriPangan(), getPasar(), getSite()]);
 
   return (
     <div className='flex w-full mt-2'>
@@ -14,6 +16,7 @@ export default async function MasteDataPage() {
           <TabsList>
             <TabsTrigger value="kategoripangan">Kategori Pangan</TabsTrigger>
             <TabsTrigger value="pasar">Pasar</TabsTrigger>
+            <TabsTrigger value="tentang">Tentang Aplikasi</TabsTrigger>
           </TabsList>
         </div>
         <TabsContent value="kategoripangan">
@@ -24,6 +27,11 @@ export default async function MasteDataPage() {
         <TabsContent value="pasar">
           {
             dataPasar && <Pasar data={dataPasar} />
+          }
+        </TabsContent>
+        <TabsContent value="tentang">
+          {
+            dataPasar && <SitePage data={dataSite} />
           }
         </TabsContent>
       </Tabs>

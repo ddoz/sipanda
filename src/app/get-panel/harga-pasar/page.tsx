@@ -9,11 +9,26 @@ const HargaPage = async ({
     searchParams: { page: string, awal: string, akhir };
   }) => {
     const awal = searchParams.awal ? new Date(searchParams.awal) : new Date();
-    awal.setHours(0, 0, 0, 0);
     const akhir = searchParams.akhir ? new Date(searchParams.akhir) : new Date();
-    akhir.setHours(23, 59, 59, 999);
+    const formatter = new Intl.DateTimeFormat("id-ID", {
+      timeZone: "Asia/Jakarta",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    
+    const formatDate = (date: Date) => {
+      const parts = formatter.formatToParts(date);
+      const year = parts.find((p) => p.type === "year")?.value;
+      const month = parts.find((p) => p.type === "month")?.value;
+      const day = parts.find((p) => p.type === "day")?.value;
+      return `${year}-${month}-${day}`;
+    };
+    
+    const awalFormatted = formatDate(awal);
+    const akhirFormatted = formatDate(akhir);
 
-    const [pangan,pasar,harga] = await Promise.all([getPangan(), getPasar(), getHargaByTanggalBetween({awal, akhir})]);
+    const [pangan,pasar,harga] = await Promise.all([getPangan(), getPasar(), getHargaByTanggalBetween({awal:awalFormatted, akhir:akhirFormatted})]);
 
 
   return (

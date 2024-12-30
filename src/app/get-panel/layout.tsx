@@ -15,6 +15,7 @@ import {
   GalleryThumbnails,
   Globe2Icon,
   Home,
+  ImageIcon,
   LineChart,
   ListCheckIcon,
   Package,
@@ -49,6 +50,7 @@ import { User } from './user';
 import { IconBroadcast, IconListCheck, IconNotification } from '@tabler/icons-react';
 import { Notifications } from "@mantine/notifications";
 import NextTopLoader from "nextjs-toploader";
+import AuthProvider from "./auth-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -66,6 +68,7 @@ export default function RootLayout({
     <html>
       <body>
       <NextTopLoader color="red" />
+      <AuthProvider>
         <MantineProvider>
           <Notifications position="top-right" />
           <Providers>
@@ -85,6 +88,7 @@ export default function RootLayout({
             </main>
           </Providers>
         </MantineProvider>
+        </AuthProvider>
       </body>
     </html>
   );
@@ -113,6 +117,10 @@ function DesktopNav() {
         <NavItem href="/get-panel/pangan" label="Pangan">
           <BadgePlusIcon className="w-5 h-5" />
         </NavItem>
+        
+        <NavItem href="/get-panel/slider" label="Slider">
+          <ImageIcon className="w-5 h-5" />
+        </NavItem>
 
         <NavItem href="/get-panel/master-data" label="Master Data">
           <Package className="w-5 h-5" />
@@ -120,6 +128,10 @@ function DesktopNav() {
 
         <NavItem href="/get-panel/user" label="User">
           <Users2 className="w-5 h-5" />
+        </NavItem>
+
+        <NavItem href="/get-panel/profil" label="User">
+          <Settings className="w-5 h-5" />
         </NavItem>
 
       </nav>
@@ -181,6 +193,13 @@ function MobileNav() {
             Pangan
           </Link>
           <Link
+            href="/get-panel/slider"
+            className="flex items-center gap-4 px-2.5 text-foreground"
+          >
+            <ImageIcon className="w-5 h-5" />
+            Slider Galeri
+          </Link>
+          <Link
             href="/get-panel/master-data"
             className="flex items-center gap-4 px-2.5 text-foreground"
           >
@@ -188,11 +207,18 @@ function MobileNav() {
             Master Data
           </Link>
           <Link
-            href="#"
+            href="/get-panel/user"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
             <Users2 className="w-5 h-5" />
             User
+          </Link>
+          <Link
+            href="/get-panel/profil"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <Settings className="w-5 h-5" />
+            Profil
           </Link>
         </nav>
       </SheetContent>

@@ -42,7 +42,7 @@ export async function saveSite({
                 ...(strukturOrganisasi && { strukturOrganisasi: strukturOrganisasi }) ,
             },
         })
-        revalidatePath('/backend/manage-site', 'page');
+        revalidatePath('/get-panel/master-data', 'page');
         return {
             status: true
         }

@@ -12,16 +12,13 @@ export async function getHargaByTanggalBetween({
   awal,
   akhir
 }:{
-  awal: Date,
-  akhir: Date
+  awal: string,
+  akhir: string
 }) {
   try {
-    // Tambahkan 7 jam ke waktu awal dan akhir
-    const awalAdjusted = new Date(awal);
-    awalAdjusted.setHours(awalAdjusted.getHours() + 7);
+    const awalAdjusted = awal;
 
-    const akhirAdjusted = new Date(akhir);
-    akhirAdjusted.setHours(akhirAdjusted.getHours() + 7);
+    const akhirAdjusted = akhir;
 
     const hargas = await prisma.hargaPasar.findMany({
       where: {
@@ -55,8 +52,12 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
         let extractor = key.split('-');
         const panganId = parseInt(extractor[0]);
         const pasarId = parseInt(extractor[1]);
-        const tanggal = new Date(extractor[2]);
+        const tanggalBelumFix = extractor[2];
+        const inputDate = tanggalBelumFix; // Input format DD/MM/YYYY
+        const [day, month, year] = inputDate.split("/"); // Pisahkan menjadi bagian
 
+        const tanggal = `${year}-${month}-${day}`;
+        
         // Tambahkan promise ke dalam array
         promises.push(
           (async () => {
