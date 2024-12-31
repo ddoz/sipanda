@@ -44,7 +44,7 @@ export async function getGrafikTanggal({id,tanggal}:{id:string,tanggal:string}) 
 }
 
 export async function getHargaTerkini() {
-  const pasar = await prisma.kategoriPangan.findMany({
+  const data = await prisma.kategoriPangan.findMany({
     include: {
       Pangan: {
         include: {
@@ -52,13 +52,26 @@ export async function getHargaTerkini() {
             orderBy: {
               tanggal: 'desc',
             },
-            take: 1,
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   });
 
-  return pasar;
-  
+  // Filter harga terkini per pasarId di setiap pangan
+  const result = data.map((kategori) => ({
+    ...kategori,
+    Pangan: kategori.Pangan.map((pangan) => ({
+      ...pangan,
+      HargaPasar: pangan.HargaPasar.reduce((acc: any[], current) => {
+        const existing = acc.find((item) => item.pasarId === current.pasarId);
+        if (!existing) {
+          acc.push(current);
+        }
+        return acc;
+      }, []),
+    })),
+  }));
+
+  return result;
 }

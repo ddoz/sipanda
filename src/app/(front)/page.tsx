@@ -24,7 +24,6 @@ export default async function Home({searchParams}:{searchParams: {id?: string,ta
   const tanggal = searchParams?.tanggal || defaultTanggal;
 
   const table = await getHargaTerkini();
-  
   return (
     <>
       <ScrollUp />

@@ -5,7 +5,6 @@ import "chart.js/auto";
 
 const PanganChart = ({data, pangan, tanggal}:{data:any[], pangan:string, tanggal:string}) => {
   const [dataChart, setDataChart] = useState<any>();
-  console.log(data);
 
   const Bar = dynamic(() => import("react-chartjs-2").then((mod) => mod.Bar), {
     ssr: false,
