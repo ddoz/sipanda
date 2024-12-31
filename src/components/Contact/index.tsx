@@ -2,9 +2,9 @@ import NewsLatterBox from "./NewsLatterBox";
 
 const Contact = () => {
   return (
-    <section id="contact" className="overflow-hidden py-16 md:py-20 lg:py-28">
+    <section id="contact" className="py-16 overflow-hidden md:py-20 lg:py-28">
       <div className="container">
-        <div className="-mx-4 flex flex-wrap">
+        <div className="flex flex-wrap -mx-4">
           <div className="w-full px-4 lg:w-7/12 xl:w-8/12">
             <div
               className="mb-12 rounded-sm bg-white px-8 py-11 shadow-three dark:bg-gray-dark sm:p-[55px] lg:mb-5 lg:px-8 xl:p-[55px]"
@@ -18,12 +18,12 @@ const Contact = () => {
                 Our support team will get back to you ASAP via email.
               </p>
               <form>
-                <div className="-mx-4 flex flex-wrap">
+                <div className="flex flex-wrap -mx-4">
                   <div className="w-full px-4 md:w-1/2">
                     <div className="mb-8">
                       <label
                         htmlFor="name"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
+                        className="block mb-3 text-sm font-medium text-dark dark:text-white"
                       >
                         Your Name
                       </label>
@@ -38,7 +38,7 @@ const Contact = () => {
                     <div className="mb-8">
                       <label
                         htmlFor="email"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
+                        className="block mb-3 text-sm font-medium text-dark dark:text-white"
                       >
                         Your Email
                       </label>
@@ -53,7 +53,7 @@ const Contact = () => {
                     <div className="mb-8">
                       <label
                         htmlFor="message"
-                        className="mb-3 block text-sm font-medium text-dark dark:text-white"
+                        className="block mb-3 text-sm font-medium text-dark dark:text-white"
                       >
                         Your Message
                       </label>
@@ -66,16 +66,13 @@ const Contact = () => {
                     </div>
                   </div>
                   <div className="w-full px-4">
-                    <button className="rounded-sm bg-primary px-9 py-4 text-base font-medium text-white shadow-submit duration-300 hover:bg-primary/90 dark:shadow-submit-dark">
+                    <button className="py-4 text-base font-medium text-white duration-300 rounded-sm bg-primary px-9 shadow-submit hover:bg-primary/90 dark:shadow-submit-dark">
                       Submit Ticket
                     </button>
                   </div>
                 </div>
               </form>
             </div>
-          </div>
-          <div className="w-full px-4 lg:w-5/12 xl:w-4/12">
-            <NewsLatterBox />
           </div>
         </div>
       </div>

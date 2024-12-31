@@ -23,6 +23,7 @@ const Content = ({ data, currentPage, totalPages }:{data:any,currentPage:any,tot
     const [name,setName] = useState('');
     const [email,setEmail] = useState('');
     const [password,setPassword] = useState('');
+    const [level,setLevel] = useState('');
     const [showForm, setShowForm] = useState(false);
     const [id,setId] = useState('');
     const [loading,setLoading] = useState(false);
@@ -71,7 +72,8 @@ const Content = ({ data, currentPage, totalPages }:{data:any,currentPage:any,tot
           const saveing = await saveUser({
             name,
             email,
-            password
+            password,
+            level
           })
           if(saveing) {
             notifications.show({
@@ -161,6 +163,13 @@ const Content = ({ data, currentPage, totalPages }:{data:any,currentPage:any,tot
                   value={password}
                   onChange={(e)=>setPassword(e.target.value)}
                 />
+                <Select
+                  label="Pilih Level"
+                  placeholder="Pilih Level"
+                  data={['admin', 'pimpinan', 'operator']}
+                  value={level}
+                  onChange={(e)=>setLevel(e)}
+                />
               <div className='border p-4 flex flex-col gap-2 w-[400px]'>
                 <Button onClick={save} variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
               </div>
@@ -168,7 +177,7 @@ const Content = ({ data, currentPage, totalPages }:{data:any,currentPage:any,tot
           }
 
           <section className={`${showForm && 'mt-20' }`}>
-            <h1 className='text-slate-600 font-bold'>Data User</h1>
+            <h1 className='font-bold text-slate-600'>Data User</h1>
             <Table className='border rounded-md'>
               <TableHeader>
                 <TableRow>
@@ -200,7 +209,7 @@ const Content = ({ data, currentPage, totalPages }:{data:any,currentPage:any,tot
               </TableBody>
             </Table>
 
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex items-center justify-between mt-4">
             
             <ButtonGroup>
               <Button size={'icon'}  disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>

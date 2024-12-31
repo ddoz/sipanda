@@ -1,45 +1,42 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { File, PlusCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import FilterChart from '@/components/Chart/FilterChart';
+import PanganChart from '@/components/Chart/PanganChart';
+import { getGrafikTanggal } from '@/services/graph';
+import { Suspense } from 'react';
 
 export default async function BackendPage({
   searchParams
 }: {
-  searchParams: { q: string; offset: string };
+  searchParams: { id: string; tanggal: string };
 }) {
-  const search = searchParams.q ?? '';
-  const offset = searchParams.offset ?? 0;
-  // const { products, newOffset, totalProducts } = await getProducts(
-  //   search,
-  //   Number(offset)
-  // );
+  const id = searchParams.id ?? '1';
+  const today = new Date();
+  const defaultTanggal = today.toISOString().split("T")[0];
+  const tanggal = searchParams?.tanggal || defaultTanggal;
+  
+  const data = await getGrafikTanggal({id:id,tanggal: tanggal});
 
   return (
-    <Tabs defaultValue="all">
-      <div className="flex items-center">
-        <TabsList>
-          <TabsTrigger value="all">Home</TabsTrigger>
-        </TabsList>
-        {/* <div className="flex items-center gap-2 ml-auto">
-          <Button size="sm" variant="outline" className="h-8 gap-1">
-            <File className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Export
-            </span>
-          </Button>
-          <Button size="sm" className="h-8 gap-1">
-            <PlusCircle className="h-3.5 w-3.5" />
-            <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Product
-            </span>
-          </Button>
-        </div> */}
-      </div>
-      <TabsContent value="all">
+    <div className='w-full mt-4'>
+      
         <h1 className='text-xl uppercase text-slate-500'>Selamat Datang</h1>
         <h1 className='text-4xl uppercase text-slate-800'>Aplikasi SIPANDA SAI HAGOM</h1>
         <h1 className='text-2xl uppercase'>Dinas Pangan Kota Bandar Lampung</h1>
-      </TabsContent>
-    </Tabs>
+
+          <div className='flex flex-col gap-4 mt-4'>
+            <FilterChart />
+
+            <Suspense fallback={"Loading..."}>
+              {
+                data && 
+                <PanganChart data={data.hargaPerPasar} tanggal={tanggal} pangan={data.pangan.namaPangan} />
+              }
+
+            </Suspense>
+
+          </div>
+    </div>
   );
 }

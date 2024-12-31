@@ -9,12 +9,19 @@ export const metadata: Metadata = {
   // other metadata
 };
 
-export default function Home() {
+export default function Home({searchParams}:{searchParams: {id?: string,tanggal?: string}}) {
+  const id = searchParams?.id || "1";
+
+  // Jika tanggal tidak ada, gunakan tanggal hari ini dalam format yyyy-MM-dd
+  const today = new Date();
+  const defaultTanggal = today.toISOString().split("T")[0];
+  const tanggal = searchParams?.tanggal || defaultTanggal;
+
   return (
     <>
       <ScrollUp />
       <Hero />
-      <Features />
+      <Features id={id} tanggal={tanggal} />
       {/* <AboutSectionTwo /> */}
     </>
   );

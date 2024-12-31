@@ -21,18 +21,20 @@ export async function getUser(page = 1, limit = 20) {
 export async function saveUser({
     name,
     email,
-    password
+    password,
+    level
 }:{
     name: string,
     email: string,
-    password: string
+    password: string,
+    level: string
 }){
     const sa = await prisma.user.create({
         data: {
             name,
             email,
             password: await hash(password, 10),
-            level: 'admin'
+            level: level
         },
     });
     return sa;
