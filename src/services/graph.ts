@@ -42,3 +42,23 @@ export async function getGrafikTanggal({id,tanggal}:{id:string,tanggal:string}) 
 
   return output;
 }
+
+export async function getHargaTerkini() {
+  const pasar = await prisma.kategoriPangan.findMany({
+    include: {
+      Pangan: {
+        include: {
+          HargaPasar: {
+            orderBy: {
+              tanggal: 'desc',
+            },
+            take: 1,
+          }
+        }
+      }
+    }
+  });
+
+  return pasar;
+  
+}

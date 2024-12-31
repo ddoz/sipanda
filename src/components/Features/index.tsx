@@ -10,14 +10,10 @@ const Features = async ({id,tanggal}:{id: string,tanggal: string}) => {
   
   return (
     <>
-      <section id="features" className="py-16 md:py-20 lg:py-28">
-        <div className="container">
-          <SectionTitle
-            title="Fitur Utama"
-            paragraph="Aplikasi ini menyajikan data harga pangan terkini."
-            center
-          />
-
+      <section id="features mt-10">
+        <div className="container mt-10">
+         
+          <h1 className="mt-10 mb-2 text-xl font-bold text-center">Grafik Harga Pangan per Pasar</h1>
           <FilterChart />
 
           <PanganChart data={data.hargaPerPasar} pangan={data.pangan.namaPangan} tanggal={tanggal} />
