@@ -40,7 +40,7 @@ const FilterChart = () => {
           id="id"
           value={id}
           onChange={(e) => setId(e.target.value)}
-          className="p-3 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-3 bg-white border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           {
             pangan.map((item) => (
@@ -59,7 +59,7 @@ const FilterChart = () => {
           id="tanggal"
           value={tanggal}
           onChange={(e) => setTanggal(e.target.value)}
-          className="p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="p-2 bg-white border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 

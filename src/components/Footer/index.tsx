@@ -5,7 +5,7 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <>
-      <footer className="relative z-10 pt-16 bg-white dark:bg-gray-dark md:pt-20 lg:pt-24">
+      <footer className="relative z-10 pt-16 bg-white md:pt-20 lg:pt-24">
         <div className="container">
           <div className="flex flex-wrap -mx-4">
             <div className="w-full px-4 md:w-1/2 lg:w-4/12 xl:w-5/12">
@@ -19,7 +19,7 @@ const Footer = () => {
                   />
                   <h1 className="mt-2">SIPANDA SAI HAGOM</h1>
                 </Link>
-                <p className="text-base leading-relaxed mb-9 text-body-color dark:text-body-color-dark">
+                <p className="text-base leading-relaxed mb-9 text-body-color">
                   Aplikasi Pantau Harga Pangan.
                 </p>
                 <div className="flex items-center">
@@ -28,7 +28,7 @@ const Footer = () => {
                     aria-label="social-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mr-6 duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                    className="mr-6 duration-300 text-body-color hover:text-primary"
                   >
                     <svg
                       width="18"
@@ -48,7 +48,7 @@ const Footer = () => {
                     aria-label="social-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mr-6 duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                    className="mr-6 duration-300 text-body-color hover:text-primary "
                   >
                     <svg
                       width="18"
@@ -70,7 +70,7 @@ const Footer = () => {
                     aria-label="social-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mr-6 duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                    className="mr-6 duration-300 text-body-color hover:text-primary "
                   >
                     <svg
                       width="18"
@@ -86,7 +86,7 @@ const Footer = () => {
                     aria-label="social-link"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                    className="duration-300 text-body-color hover:text-primary "
                   >
                     <svg
                       width="17"
@@ -103,7 +103,7 @@ const Footer = () => {
 
             <div className="w-full px-4 sm:w-1/2 md:w-1/2 lg:w-2/12 xl:w-2/12">
               <div className="mb-12 lg:mb-16">
-                <h2 className="mb-10 text-xl font-bold text-black dark:text-white">
+                <h2 className="mb-10 text-xl font-bold text-black ">
                   Link Terkait
                 </h2>
                 <ul>
@@ -111,7 +111,7 @@ const Footer = () => {
                     <Link
                       href="https://dev-dinaspangan.bandarlampungkota.go.id"
                       target="_blank"
-                      className="inline-block mb-4 text-base duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 text-body-color hover:text-primary "
                     >
                       Portal Dinas Pangan Kota Bandar Lampung
                     </Link>
@@ -119,7 +119,7 @@ const Footer = () => {
                   <li>
                     <Link
                       href="https://bandarlampungkota.go.id"
-                      className="inline-block mb-4 text-base duration-300 text-body-color hover:text-primary dark:text-body-color-dark dark:hover:text-primary"
+                      className="inline-block mb-4 text-base duration-300 text-body-color hover:text-primary "
                     >
                       Portal Kota Bandar Lampung
                     </Link>
@@ -130,9 +130,9 @@ const Footer = () => {
 
           </div>
 
-          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent dark:via-[#959CB183]"></div>
+          <div className="h-px w-full bg-gradient-to-r from-transparent via-[#D2D8E183] to-transparent "></div>
           <div className="py-8">
-            <p className="text-base text-center text-body-color dark:text-white">
+            <p className="text-base text-center text-body-color ">
               Copyright{" "}
               &copy; 2024 DINAS PANGAN KOTA BANDAR LAMPUNG
             </p>
