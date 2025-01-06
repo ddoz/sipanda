@@ -194,7 +194,7 @@ const Peraturan = ({ data, kategori, currentPage, totalPages }:{data:any,kategor
 
     const updateData = (item:any) => {
       setId(item.id.toString());
-      setJudul(item.nama);
+      setJudul(item.namaPangan);
       setKategoriPanganId(item.kategoriPanganId.toString());
       setSatuan(item.satuan);
       setShowForm(true);
@@ -218,7 +218,7 @@ const Peraturan = ({ data, kategori, currentPage, totalPages }:{data:any,kategor
             <CardTitle>
                 <div className='flex flex-row justify-between'>
                     <h1>Form Pangan</h1>
-                    <Button variant={'outline'} size={'sm'} onClick={create}><PlusCircle /></Button>
+                    <Button variant={'outline'} className='rounded' size={'sm'} onClick={create}><PlusCircle /></Button>
                 </div>
             </CardTitle>
         </CardHeader>
@@ -229,7 +229,7 @@ const Peraturan = ({ data, kategori, currentPage, totalPages }:{data:any,kategor
                 <div className='w-full'>
                   <TextInput value={judul} onChange={(e)=>setJudul(e.target.value)} placeholder='Judul' label="Judul" />
                  
-                  <Select label="Satuan" data={['Kg','Liter']} defaultValue={satuan} 
+                  <Select label="Satuan" data={['Kg','Liter']} defaultValue={satuan} value={satuan}
                       onChange={(_value, option) => setSatuan(_value!)}/>
                   <Select 
                       label="Pilih Kategori"
@@ -238,6 +238,7 @@ const Peraturan = ({ data, kategori, currentPage, totalPages }:{data:any,kategor
                       searchable
                       onChange={(_value, option) => setKategoriPanganId(_value!)}
                       defaultValue={kategoriPanganId}
+                      value={kategoriPanganId}
                   />
                  
 
@@ -245,7 +246,7 @@ const Peraturan = ({ data, kategori, currentPage, totalPages }:{data:any,kategor
                 
                 
               </div>
-                <Button onClick={save} variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
+                <Button onClick={save} className='text-white rounded bg-slate-700 hover:bg-slate-800' disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
             </div>
           }
 

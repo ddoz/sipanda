@@ -178,7 +178,7 @@ const SlideContent = ({ data }:{data:any}) => {
             <CardTitle>
                 <div className='flex flex-row justify-between'>
                     <h1>Form Slider Image</h1>
-                    <Button variant={'outline'} size={'sm'} onClick={create}><PlusCircle /></Button>
+                    <Button className='rounded' variant={'outline'} size={'sm'} onClick={create}><PlusCircle /></Button>
                 </div>
             </CardTitle>
         </CardHeader>
@@ -192,7 +192,7 @@ const SlideContent = ({ data }:{data:any}) => {
                       preview && <ViewFileComponent filePath={preview} title='' />
                     }
                     <FileButton onChange={setFile} accept="image/png,image/jpeg">
-                      {(props) => <Button {...props} color='gray'>Pilih Gambar</Button>}
+                      {(props) => <Button {...props} color='gray' variant='outline' className='rounded'>Pilih Gambar</Button>}
                     </FileButton>
                     {
                       file && <Alert variant="light" color="blue" title="Informasi" icon={<IconInfoCircle />}>
@@ -203,7 +203,7 @@ const SlideContent = ({ data }:{data:any}) => {
                 </div>
                 
               </div>
-                <Button onClick={save} variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
+                <Button onClick={save} className='text-white rounded bg-slate-700 hover:bg-slate-800' variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
             </div>
           }
 

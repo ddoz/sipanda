@@ -48,7 +48,7 @@ const SitePage = ({data}:{data:any}) => {
       <CardContent>
         <section className='w-[500px] gap-2 flex flex-col border p-2 rounded-md transition-all duration-500'>
             <Textarea size='xl' defaultValue={data.sejarah} placeholder='Tentang Aplikasi' onChange={(e)=>setJudul(e.target.value)} value={judul} />
-            <Button onClick={save} variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
+            <Button className='text-white rounded bg-slate-700 hover:bg-slate-800' onClick={save} variant={'default'} disabled={loading}>{ loading ? 'Sedang menyimpan...' : 'Simpan'}</Button>
         </section>
       </CardContent>
     </Card>
