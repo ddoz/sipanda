@@ -3,6 +3,8 @@ import Content from './content'
 import { getPangan, getPasar } from '@/services/master-data'
 import { getHargaByTanggalBetween } from '@/services/harga-pasar';
 
+export const revalidate = 30;
+
 const HargaPage = async ({
     searchParams
   }: {
