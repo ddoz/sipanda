@@ -140,7 +140,7 @@ const handleUpdateHarga = async () => {
            <div className='flex flex-row justify-between mb-5'>
             <h1 className='mb-4 font-bold text-slate-600'>Data Harga Pangan Pasar</h1>
            </div>
-            <Table className='border rounded-md'>
+            <Table className='border-2 border-black rounded'>
               <TableHeader>
                 <TableRow>
                   <TableHead>No</TableHead>
@@ -152,13 +152,13 @@ const handleUpdateHarga = async () => {
                   <TableHead className="text-right"></TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
+              <TableBody className='border-2 border-black'>
                 {pangan.map((panganItem, panganIndex) => (
                   pasar.map((pasarItem, pasarIndex) => (
-                    <TableRow key={`${panganIndex}-${pasarIndex}`}>
+                    <TableRow key={`${panganIndex}-${pasarIndex}`} className='border-b-2 border-black'>
                       {pasarIndex === 0 && (
                         <>
-                          <TableCell rowSpan={pasar.length} className="w-[100px]">
+                          <TableCell rowSpan={pasar.length} className="w-[100px] text-start">
                             {panganIndex + 1}
                           </TableCell>
                           <TableCell rowSpan={pasar.length}>
