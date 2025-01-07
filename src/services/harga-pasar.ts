@@ -54,9 +54,14 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
         const pasarId = parseInt(extractor[1]);
         const tanggalBelumFix = extractor[2];
         const inputDate = tanggalBelumFix; // Input format DD/MM/YYYY
-        const [day, month, year] = inputDate.split("/"); // Pisahkan menjadi bagian
+        const [day, month, year] = inputDate.split("/"); // Pisahkan input dengan format "dd/mm/yyyy"
 
-        const tanggal = `${year}-${month}-${day}`;
+        // Tambahkan '0' jika day atau month kurang dari 10
+        const formattedDay = day.padStart(2, "0");
+        const formattedMonth = month.padStart(2, "0");
+
+        // Gabungkan ke dalam format yyyy-mm-dd
+        const tanggal = `${year}-${formattedMonth}-${formattedDay}`;
         
         // Tambahkan promise ke dalam array
         promises.push(
