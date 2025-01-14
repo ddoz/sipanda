@@ -10,10 +10,12 @@ const convertToUTC = (date, timeZone) => {
 
 export async function getHargaByTanggalBetween({
   awal,
-  akhir
+  akhir, 
+  panganId
 }:{
   awal: string,
-  akhir: string
+  akhir: string,
+  panganId: string
 }) {
   try {
     const awalAdjusted = awal;
@@ -25,7 +27,8 @@ export async function getHargaByTanggalBetween({
         tanggal: {
           gte: awalAdjusted,
           lte: akhirAdjusted
-        }
+        },
+        ...panganId && { panganId: parseInt(panganId) }
       },
     })
 

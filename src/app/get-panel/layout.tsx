@@ -3,8 +3,9 @@ import { MantineColorsTuple, MantineProvider, createTheme } from "@mantine/core"
 import '@mantine/core/styles.css';
 import '@mantine/dropzone/styles.css';
 import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
 import "../../styles/globals.css";
+import "../../styles/index.css";
+import '@mantine/dates/styles.css';
 
 import Link from 'next/link';
 import {
@@ -58,25 +59,6 @@ export const metadata = {
   description: 'Aplikasi Pantau Harga Pangan',
 }
 
-const myColor: MantineColorsTuple = [
-  '#ecf4ff',
-  '#dce4f5',
-  '#b9c7e2',
-  '#94a8d0',
-  '#748dc0',
-  '#5f7cb7',
-  '#5474b4',
-  '#44639f',
-  '#3a5890',
-  '#2c4b80'
-];
-
-const theme = createTheme({
-  colors: {
-    myColor,
-  }
-});
-
 export default function RootLayout({
   children,
 }: {
@@ -87,7 +69,7 @@ export default function RootLayout({
       <body>
       <NextTopLoader color="red" />
       <AuthProvider>
-        <MantineProvider theme={theme}>
+        <MantineProvider>
           <Notifications position="top-right" />
           <Providers>
             <main className="flex flex-col w-full min-h-screen bg-muted/40">

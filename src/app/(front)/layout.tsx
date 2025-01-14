@@ -4,16 +4,9 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import ScrollToTop from "@/components/ScrollToTop";
 import { Inter } from "next/font/google";
-import { ColorSchemeScript } from '@mantine/core';
-import { Notifications } from "@mantine/notifications";
 import NextTopLoader from 'nextjs-toploader';
 
-import '@mantine/dropzone/styles.css';
-import '@mantine/notifications/styles.css';
-import '@mantine/dates/styles.css';
-import "node_modules/react-modal-video/css/modal-video.css";
 import "../../styles/index.css";
-import '@mantine/core/styles.css';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,16 +23,14 @@ export default function RootLayout({
       */}
       <head />
 
-      <body className={`bg-[#FCFCFC] ${inter.className}`}>
+      <body className={`bg-[#FCFCFC]`}>
       <NextTopLoader color="red" />
-        <MantineProvider>
           <Providers>
             <Header />
             {children}
             <Footer />
             <ScrollToTop />
           </Providers>
-        </MantineProvider>
       </body>
     </html>
   );

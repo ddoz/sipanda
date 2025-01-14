@@ -257,6 +257,11 @@ export async function getPangan() {
     return panganData;
 }
 
+export async function getPanganById(id:any) {
+    const panganData = await prisma.pangan.findMany({where: {id: parseInt(id)}});
+    return panganData;
+}
+
 export async function savePangan({
     nama,
     satuan,

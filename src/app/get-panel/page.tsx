@@ -30,7 +30,7 @@ export default async function BackendPage({
 
             <Suspense fallback={"Loading..."}>
               {
-                data && 
+                data &&  data.pangan &&
                 <PanganChart data={data.hargaPerPasar} tanggal={tanggal} pangan={data.pangan.namaPangan} />
               }
 
