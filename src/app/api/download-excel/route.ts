@@ -12,7 +12,7 @@ export async function POST(req: Request) {
             { status: 401 }
         );
     }
-    
+
     try {
         // Mengambil data JSON dari request body
         const { bulan, tahun } = await req.json();
@@ -25,22 +25,43 @@ export async function POST(req: Request) {
         }
 
         // Ambil data dari database menggunakan prisma
-        const data = await prisma.$transaction([
-            prisma.hargaPasar.findMany({
-                where: {
-                    tanggal: {
-                        contains: `${tahun}-${bulan}`,
-                    },
+        const data = await prisma.hargaPasar.findMany({
+            where: {
+                tanggal: {
+                    contains: `${tahun}-${bulan}`,
                 },
-                orderBy: {
-                    tanggal: 'asc',
+            },
+            orderBy: {
+                tanggal: 'asc',
+            },
+            select: {
+                tanggal: true,
+                pangan: {
+                    select: {
+                        namaPangan: true,
+                    }
                 },
-            }),
-        ]);
+                pasar: {
+                    select: {
+                        nama: true
+                    }
+                },
+                harga: true
+            }
+        });
 
-        // Buat file Excel menggunakan data yang didapat
+        // Tambahkan nomor urut dan ubah header kolom
+        const formattedData = data.map((item, index) => ({
+            No: index + 1, // Tambahkan nomor urut
+            Tanggal: item.tanggal,
+            'Nama Pangan': item.pangan.namaPangan,
+            'Nama Pasar': item.pasar.nama,
+            Harga: item.harga
+        }));
+
+        // Buat file Excel menggunakan data yang telah diformat
         const wb = XLSX.utils.book_new();
-        const ws = XLSX.utils.json_to_sheet(data[0]);  // Menggunakan data pertama
+        const ws = XLSX.utils.json_to_sheet(formattedData);
         XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
         const buf = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' });
 
@@ -60,3 +81,4 @@ export async function POST(req: Request) {
         );
     }
 }
+
