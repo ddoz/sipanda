@@ -177,20 +177,30 @@ enum TipeHarga {
 }
 
 model HargaPasar {
-  id           Int       @id @default(autoincrement())
-  tanggal      String
-  pangan       Pangan    @relation(fields: [panganId], references: [id])
-  pasar        Pasar     @relation(fields: [pasarId], references: [id])
-  user         User      @relation(fields: [userId], references: [id])
-  tipe         TipeHarga
-  harga        Float
-  panganId     Int
-  pasarId      Int
-  userId       Int
-  persentase   String?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id         Int       @id @default(autoincrement())
+  tanggal    String
+  pangan     Pangan    @relation(fields: [panganId], references: [id])
+  pasar      Pasar     @relation(fields: [pasarId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  tipe       TipeHarga
+  harga      Float
+  panganId   Int
+  pasarId    Int
+  userId     Int
+  persentase String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
 
   @@unique([panganId, pasarId, tanggal])
   @@map("hargapasar")
+}
+
+model KritikSaran {
+  id        Int      @id @default(autoincrement())
+  nilai     String
+  saran     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("kritik_saran")
 }
