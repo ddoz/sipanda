@@ -14,13 +14,13 @@ export async function GET(req: Request) {
       },
     });
 
-    // Gabungkan hasilnya
+    // Gabungkan hasilnya dengan pembulatan harga
     const result = panganList.map((pangan) => {
       const avgHarga =
         hargaRataRata.find((h) => h.panganId === pangan.id)?._avg.harga || 0;
       return {
         ...pangan,
-        rataRataHarga: avgHarga,
+        rataRataHarga: Math.round(avgHarga), // Bulatkan harga ke bilangan bulat terdekat
       };
     });
 
