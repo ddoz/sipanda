@@ -37,7 +37,7 @@ export async function GET(req: Request) {
       const panganNama = "data";
       const pasarNama = h.pasar.nama;
       const harga = h.harga;
-      const tanggal = h.createdAt.toISOString().split("T")[0]; // Format YYYY-MM-DD
+      const tanggal = h.tanggal; // Format YYYY-MM-DD
 
       if (!result[panganNama]) {
         result[panganNama] = {};
