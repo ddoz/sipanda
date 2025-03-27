@@ -13,44 +13,37 @@ export async function GET(req: Request) {
       );
     }
 
-    const hargaList = await prisma.hargaPasar.findMany({
-      where: {
-        panganId: Number(panganId),
-      },
-      include: {
-        pasar: true,
-        pangan: true,
-      },
-      orderBy: [
-        { tanggal: "desc" }, // Urutkan dari tanggal terbaru
-        { pasarId: "asc" }, // Urutkan berdasarkan pasar
-      ],
-      take: 7, // Ambil hanya 7 data terbaru
+    // Ambil semua pasar yang memiliki data harga terkait panganId tertentu
+    const pasarList = await prisma.pasar.findMany({
+      select: { id: true, nama: true },
     });
-
-    console.log(hargaList);
 
     const result: Record<
       string,
       Record<string, { tanggal: string; harga: number }[]>
     > = {};
 
-    hargaList.forEach((h) => {
-      const panganNama = "data";
-      const pasarNama = h.pasar.nama;
-      const harga = h.harga;
-      const tanggal = h.tanggal; // Format YYYY-MM-DD
+    for (const pasar of pasarList) {
+      const hargaList = await prisma.hargaPasar.findMany({
+        where: {
+          panganId: Number(panganId),
+          pasarId: pasar.id,
+        },
+        orderBy: {
+          tanggal: "desc", // Urutkan dari tanggal terbaru
+        },
+        take: 7, // Ambil 7 data terakhir per pasar
+      });
 
-      if (!result[panganNama]) {
-        result[panganNama] = {};
+      if (hargaList.length > 0) {
+        const panganNama = "data";
+        if (!result[panganNama]) result[panganNama] = {};
+        result[panganNama][pasar.nama] = hargaList.map((h) => ({
+          tanggal: h.tanggal,
+          harga: h.harga,
+        }));
       }
-
-      if (!result[panganNama][pasarNama]) {
-        result[panganNama][pasarNama] = [];
-      }
-
-      result[panganNama][pasarNama].push({ tanggal, harga });
-    });
+    }
 
     return NextResponse.json(result, { status: 200 });
   } catch (e: any) {
