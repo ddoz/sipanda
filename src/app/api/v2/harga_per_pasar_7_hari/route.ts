@@ -28,6 +28,8 @@ export async function GET(req: Request) {
       take: 7, // Ambil hanya 7 data terbaru
     });
 
+    console.log(hargaList);
+
     const result: Record<
       string,
       Record<string, { tanggal: string; harga: number }[]>
