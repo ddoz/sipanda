@@ -22,7 +22,7 @@ export async function GET(req: Request) {
         pangan: true,
       },
       orderBy: [
-        { createdAt: "desc" }, // Urutkan dari tanggal terbaru
+        { tanggal: "desc" }, // Urutkan dari tanggal terbaru
         { pasarId: "asc" }, // Urutkan berdasarkan pasar
       ],
       take: 7, // Ambil hanya 7 data terbaru
