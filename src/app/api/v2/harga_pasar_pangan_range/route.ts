@@ -35,7 +35,7 @@ export async function POST(req: Request) {
         pasar: true,
         pangan: true,
       },
-      orderBy: [{ createdAt: "desc" }, { pasarId: "asc" }],
+      orderBy: [{ tanggal: "desc" }, { pasarId: "asc" }],
     });
 
     return NextResponse.json(hargaList, { status: 200 });
