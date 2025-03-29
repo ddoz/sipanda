@@ -5,10 +5,6 @@ export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // Tetapkan default value
-    const pasarId = Number(body.pasarId) || 1;
-    const panganId = Number(body.panganId) || 1;
-
     // Pastikan format tanggal valid
     const today = new Date();
     const formatDate = (date: Date) => date.toISOString().split("T")[0];
@@ -23,15 +19,18 @@ export async function POST(req: Request) {
         ? new Date(body.tanggalAkhir)
         : today;
 
-    const hargaList = await prisma.hargaPasar.findMany({
-      where: {
-        panganId: panganId,
-        pasarId: pasarId,
-        tanggal: {
-          gte: formatDate(tanggalAwal),
-          lte: formatDate(tanggalAkhir),
-        },
+    // Membentuk kondisi where secara dinamis
+    const whereClause: any = {
+      tanggal: {
+        gte: formatDate(tanggalAwal),
+        lte: formatDate(tanggalAkhir),
       },
+      ...(body.pasarId && { pasarId: Number(body.pasarId) }),
+      ...(body.panganId && { panganId: Number(body.panganId) }),
+    };
+
+    const hargaList = await prisma.hargaPasar.findMany({
+      where: whereClause,
       include: {
         pasar: true,
         pangan: true,
