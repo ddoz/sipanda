@@ -6,24 +6,28 @@ import FilterChart from "../Chart/FilterChart";
 import PanganChart from "../Chart/PanganChart";
 import { Suspense } from "react";
 
-const Features = async ({id,tanggal}:{id: string,tanggal: string}) => {
-  const data = await getGrafikTanggal({id:id,tanggal: tanggal});
-  
+const Features = async ({ id, tanggal }: { id: string; tanggal: string }) => {
+  const data: any = await getGrafikTanggal({ id: id, tanggal: tanggal });
+
   return (
     <>
       <section id="features mt-10">
         <div className="container mt-10">
-         
-          <h1 className="mt-10 mb-2 text-xl font-bold text-center">Grafik Harga Pangan per Pasar</h1>
+          <h1 className="mb-2 mt-10 text-center text-xl font-bold">
+            Grafik Harga Pangan per Pasar
+          </h1>
           <FilterChart />
           <Suspense fallback={"Loading..."}>
-          {
-            data && data.pangan &&  <PanganChart data={data.hargaPerPasar} pangan={data.pangan.namaPangan} tanggal={tanggal} />
-          }
+            {data && data.pangan && (
+              <PanganChart
+                data={data.hargaPerPasar}
+                pangan={data.pangan.namaPangan}
+                tanggal={tanggal}
+              />
+            )}
           </Suspense>
-          
 
-          <div className="grid grid-cols-1 mt-10 gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3">
             {featuresData.map((feature) => (
               <SingleFeature key={feature.id} feature={feature} />
             ))}

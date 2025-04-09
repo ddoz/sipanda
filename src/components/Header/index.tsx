@@ -43,16 +43,16 @@ const Header = () => {
       <header
         className={`header left-0 top-0 z-40 flex w-full items-center ${
           sticky
-            ? "fixed z-[9999] bg-white !bg-opacity-80 shadow-sticky backdrop-blur-sm transition"
+            ? "shadow-sticky fixed z-[9999] bg-white !bg-opacity-80 backdrop-blur-sm transition"
             : "absolute bg-transparent"
         }`}
       >
         <div className="container">
-          <div className="relative flex items-center justify-between -mx-4">
-            <div className="max-w-full px-4 w-60 xl:mr-12">
+          <div className="relative -mx-4 flex items-center justify-between">
+            <div className="w-60 max-w-full px-4 xl:mr-12">
               <Link
                 href="/"
-                className={`header-logo items-center w-full flex flex-row gap-2 ${
+                className={`header-logo flex w-full flex-row items-center gap-2 ${
                   sticky ? "py-5 lg:py-2" : "py-8"
                 } `}
               >
@@ -65,7 +65,7 @@ const Header = () => {
                 <h1>SIPANDA SAI HAGOM</h1>
               </Link>
             </div>
-            <div className="flex items-center justify-between w-full px-4">
+            <div className="flex w-full items-center justify-between px-4">
               <div>
                 <button
                   onClick={navbarToggleHandler}
@@ -91,7 +91,7 @@ const Header = () => {
                 </button>
                 <nav
                   id="navbarCollapse"
-                  className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${
+                  className={`navbar border-body-color/50 absolute right-0 z-30 w-[250px] rounded border-[.5px] bg-white px-6 py-4 duration-300 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 ${
                     navbarOpen
                       ? "visibility top-full opacity-100"
                       : "invisible top-[120%] opacity-0"
@@ -99,7 +99,7 @@ const Header = () => {
                 >
                   <ul className="block lg:flex lg:space-x-12">
                     {menuData.map((menuItem, index) => (
-                      <li key={index} className="relative group">
+                      <li key={index} className="group relative">
                         {menuItem.path ? (
                           <Link
                             href={menuItem.path}
@@ -115,7 +115,7 @@ const Header = () => {
                           <>
                             <p
                               onClick={() => handleSubmenu(index)}
-                              className="flex items-center justify-between py-2 text-base cursor-pointer text-dark group-hover:text-primary lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
+                              className="text-dark flex cursor-pointer items-center justify-between py-2 text-base group-hover:text-primary lg:mr-0 lg:inline-flex lg:px-0 lg:py-6"
                             >
                               {menuItem.title}
                               <span className="pl-3">
@@ -134,11 +134,11 @@ const Header = () => {
                                 openIndex === index ? "block" : "hidden"
                               }`}
                             >
-                              {menuItem.submenu.map((submenuItem, index) => (
+                              {menuItem.submenu!.map((submenuItem, index) => (
                                 <Link
-                                  href={submenuItem.path}
+                                  href={submenuItem.path!}
                                   key={index}
-                                  className="block rounded py-2.5 text-sm text-dark hover:text-primary lg:px-3"
+                                  className="text-dark block rounded py-2.5 text-sm hover:text-primary lg:px-3"
                                 >
                                   {submenuItem.title}
                                 </Link>
@@ -152,9 +152,7 @@ const Header = () => {
                 </nav>
               </div>
               <div className="flex items-center justify-end pr-16 lg:pr-0">
-                <div>
-                  {/* <ThemeToggler /> */}
-                </div>
+                <div>{/* <ThemeToggler /> */}</div>
               </div>
             </div>
           </div>

@@ -1,34 +1,45 @@
 "use server";
-import prisma from '@/lib/prisma';
+import prisma from "@/lib/prisma";
 
-export async function getGrafikTanggal({id,tanggal}:{id:string,tanggal:string}) {
-  const pangan = await prisma.pangan.findFirst(
-    {
-      where:{
-        id: parseInt(id),
-      },
-    }
-  )
+export async function getGrafikTanggal({
+  id,
+  tanggal,
+}: {
+  id: string;
+  tanggal: string;
+}) {
+  const pangan = await prisma.pangan.findFirst({
+    where: {
+      id: parseInt(id),
+    },
+  });
+
+  if (!pangan) {
+    return {
+      status: "fail",
+      error: "Pangan tidak ditemukan",
+    };
+  }
 
   const pasar = await prisma.pasar.findMany();
 
-  let hargaPerPasar = [];
+  let hargaPerPasar: any[] = [];
   for (const val of pasar) {
     const getHarga = await prisma.hargaPasar.findFirst({
       where: {
         panganId: pangan.id,
         pasarId: val.id,
-        tanggal: tanggal
+        tanggal: tanggal,
       },
       orderBy: {
-        tanggal: 'desc',
+        tanggal: "desc",
       },
       take: 1,
     });
 
-    let dataToPush = {
+    let dataToPush: any = {
       pasar: val.nama,
-      harga: getHarga?.harga ?? '0',
+      harga: getHarga?.harga ?? "0",
       tanggal: tanggal,
     };
 
@@ -38,7 +49,7 @@ export async function getGrafikTanggal({id,tanggal}:{id:string,tanggal:string}) 
   const output = {
     pangan,
     hargaPerPasar,
-  }
+  };
 
   return output;
 }
@@ -50,7 +61,7 @@ export async function getHargaTerkini() {
         include: {
           HargaPasar: {
             orderBy: {
-              tanggal: 'desc',
+              tanggal: "desc",
             },
           },
         },

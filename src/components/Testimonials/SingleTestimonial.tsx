@@ -9,7 +9,7 @@ const starIcon = (
 const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
   const { star, name, image, content, designation } = testimonial;
 
-  let ratingIcons = [];
+  let ratingIcons: any[] = [];
   for (let index = 0; index < star; index++) {
     ratingIcons.push(
       <span key={index} className="text-yellow">
@@ -20,9 +20,9 @@ const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
 
   return (
     <div className="w-full">
-      <div className="rounded-sm bg-white p-8 shadow-two duration-300 hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark lg:px-5 xl:px-8">
+      <div className="shadow-two hover:shadow-one dark:bg-dark dark:shadow-three dark:hover:shadow-gray-dark rounded-sm bg-white p-8 duration-300 lg:px-5 xl:px-8">
         <div className="mb-5 flex items-center space-x-1">{ratingIcons}</div>
-        <p className="mb-8 border-b border-body-color border-opacity-10 pb-8 text-base leading-relaxed text-body-color dark:border-white dark:border-opacity-10 dark:text-white">
+        <p className="border-body-color text-body-color mb-8 border-b border-opacity-10 pb-8 text-base leading-relaxed dark:border-white dark:border-opacity-10 dark:text-white">
           “{content}
         </p>
         <div className="flex items-center">
@@ -30,10 +30,10 @@ const SingleTestimonial = ({ testimonial }: { testimonial: Testimonial }) => {
             <Image src={image} alt={name} fill />
           </div>
           <div className="w-full">
-            <h3 className="mb-1 text-lg font-semibold text-dark dark:text-white lg:text-base xl:text-lg">
+            <h3 className="text-dark mb-1 text-lg font-semibold dark:text-white lg:text-base xl:text-lg">
               {name}
             </h3>
-            <p className="text-sm text-body-color">{designation}</p>
+            <p className="text-body-color text-sm">{designation}</p>
           </div>
         </div>
       </div>

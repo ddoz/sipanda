@@ -1,7 +1,7 @@
 "use server";
-import prisma from "@/lib/prisma"
+import prisma from "@/lib/prisma";
 import { TipeHarga } from "@prisma/client";
-import { toZonedTime, format } from 'date-fns-tz';
+import { toZonedTime, format } from "date-fns-tz";
 import { revalidatePath } from "next/cache";
 
 const convertToUTC = (date, timeZone) => {
@@ -10,12 +10,12 @@ const convertToUTC = (date, timeZone) => {
 
 export async function getHargaByTanggalBetween({
   awal,
-  akhir, 
-  panganId
-}:{
-  awal: string,
-  akhir: string,
-  panganId: string
+  akhir,
+  panganId,
+}: {
+  awal: string;
+  akhir: string;
+  panganId: string;
 }) {
   try {
     const awalAdjusted = awal;
@@ -26,33 +26,31 @@ export async function getHargaByTanggalBetween({
       where: {
         tanggal: {
           gte: awalAdjusted,
-          lte: akhirAdjusted
+          lte: akhirAdjusted,
         },
-        ...panganId && { panganId: parseInt(panganId) }
+        ...(panganId && { panganId: parseInt(panganId) }),
       },
-    })
+    });
 
     return hargas;
-
-
   } catch (error) {
-    return []
+    return [];
   }
 }
 
 const convertToUTC2 = (date: Date) => {
-  return new Date(date.toISOString().split('T')[0]); // Mengambil bagian tanggal dari ISO string
+  return new Date(date.toISOString().split("T")[0]); // Mengambil bagian tanggal dari ISO string
 };
 
 export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
-  const promises = []; // Array untuk menampung semua promises
+  const promises: any[] = []; // Array untuk menampung semua promises
 
   try {
     // Looping object
     for (const key in inputValues) {
       if (inputValues.hasOwnProperty(key)) {
         // Extract data key
-        let extractor = key.split('-');
+        let extractor = key.split("-");
         const panganId = parseInt(extractor[0]);
         const pasarId = parseInt(extractor[1]);
         const tanggalBelumFix = extractor[2];
@@ -65,7 +63,7 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
 
         // Gabungkan ke dalam format yyyy-mm-dd
         const tanggal = `${year}-${formattedMonth}-${formattedDay}`;
-        
+
         // Tambahkan promise ke dalam array
         promises.push(
           (async () => {
@@ -79,21 +77,21 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
                 },
               },
               orderBy: {
-                tanggal: 'desc', // Urutkan berdasarkan tanggal, ambil yang terbaru sebelum tanggal yang diproses
+                tanggal: "desc", // Urutkan berdasarkan tanggal, ambil yang terbaru sebelum tanggal yang diproses
               },
             });
-        
+
             // Hitung persentase perubahan jika harga sebelumnya ditemukan
-           
+
             let tipe: TipeHarga = TipeHarga.STABIL; // default type
             const newHarga = parseFloat(inputValues[key]);
 
             let oldHarga = 0;
             let percentageChange = 0;
-        
+
             if (previousHarga) {
               oldHarga = parseFloat(previousHarga.harga.toString());
-        
+
               // Bandingkan harga lama dengan harga baru
               if (newHarga > oldHarga) {
                 tipe = TipeHarga.NAIK;
@@ -107,7 +105,7 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
               tipe = TipeHarga.NAIK;
               percentageChange = 100; // Anggap kenaikan penuh untuk data baru
             }
-        
+
             // Cek apakah data untuk tanggal ini sudah ada
             const existingData = await prisma.hargaPasar.findUnique({
               where: {
@@ -119,9 +117,9 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
               },
             });
             console.log(existingData);
-        
+
             if (existingData) {
-              console.log('sinitialized')
+              console.log("sinitialized");
               // Jika data sudah ada, lakukan update
               await prisma.hargaPasar.update({
                 where: {
@@ -151,22 +149,22 @@ export const updateHarga = async ({ inputValues }: { inputValues: any }) => {
                 },
               });
             }
-          })()
+          })(),
         );
       }
     }
 
     // Jalankan semua promises secara paralel
     await Promise.all(promises);
-    revalidatePath(`/get-panel/harga-pasar`, 'page');
+    revalidatePath(`/get-panel/harga-pasar`, "page");
     return {
       status: true,
     };
   } catch (error) {
-    console.error('Error updating harga:', error);
+    console.error("Error updating harga:", error);
     return {
       status: false,
-      message: 'Error occurred while updating harga.',
+      message: "Error occurred while updating harga.",
     };
   }
 };
