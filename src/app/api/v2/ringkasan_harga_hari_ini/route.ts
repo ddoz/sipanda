@@ -26,10 +26,6 @@ export async function GET(req: Request) {
         panganId: true,
         harga: true,
       },
-      orderBy: {
-        tanggal: "desc",
-      },
-      take: 7,
     });
 
     // Gabungkan hasilnya dengan perhitungan modus
