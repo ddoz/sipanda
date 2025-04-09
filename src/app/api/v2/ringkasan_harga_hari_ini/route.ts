@@ -1,65 +1,98 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
-export async function GET(req: Request) {
-  try {
+export function GET(req) {
+  return new Promise(function (resolve) {
     // Ambil data pangan
-    const panganList = await prisma.pangan.findMany();
+    prisma.pangan
+      .findMany()
+      .then(function (panganList) {
+        var now = new Date();
+        var sevenDaysAgo = new Date(now);
+        sevenDaysAgo.setDate(now.getDate() - 7);
 
-    // Dapatkan tanggal 7 hari lalu dalam format YYYY-MM-DD
-    const now = new Date();
-    const sevenDaysAgo = new Date(now);
-    sevenDaysAgo.setDate(now.getDate() - 7);
-
-    // Format ke string 'YYYY-MM-DD'
-    const pad = (n: number) => n.toString().padStart(2, "0");
-    const sevenDaysAgoStr = `${sevenDaysAgo.getFullYear()}-${pad(sevenDaysAgo.getMonth() + 1)}-${pad(sevenDaysAgo.getDate())}`;
-
-    // Ambil harga pasar dengan filter tanggal (string comparison)
-    const hargaPasarList = await prisma.hargaPasar.findMany({
-      where: {
-        tanggal: {
-          gte: sevenDaysAgoStr, // dibandingkan sebagai string
-        },
-      },
-      select: {
-        panganId: true,
-        harga: true,
-      },
-    });
-
-    // Gabungkan hasilnya dengan perhitungan modus
-    const result = panganList.map((pangan) => {
-      const hargaList = hargaPasarList
-        .filter((h) => h.panganId === pangan.id)
-        .map((h) => h.harga);
-
-      const freqMap = new Map<number, number>();
-      hargaList.forEach((harga) => {
-        freqMap.set(harga, (freqMap.get(harga) || 0) + 1);
-      });
-
-      let modus = 0;
-      let maxFreq = 0;
-      for (const [harga, freq] of freqMap.entries()) {
-        if (freq > maxFreq) {
-          modus = harga;
-          maxFreq = freq;
+        // Format ke string 'YYYY-MM-DD'
+        function pad(n) {
+          return n.toString().length < 2 ? "0" + n : n;
         }
-      }
 
-      return {
-        ...pangan,
-        rataRataHarga: modus,
-      };
-    });
+        var sevenDaysAgoStr =
+          sevenDaysAgo.getFullYear() +
+          "-" +
+          pad(sevenDaysAgo.getMonth() + 1) +
+          "-" +
+          pad(sevenDaysAgo.getDate());
 
-    return NextResponse.json(result, { status: 200 });
-  } catch (e: any) {
-    console.error(e);
-    return NextResponse.json(
-      { status: "fail", error: e.message },
-      { status: 500 },
-    );
-  }
+        prisma.hargaPasar
+          .findMany({
+            // where: {
+            //   tanggal: {
+            //     gte: sevenDaysAgoStr,
+            //   },
+            // },
+            select: {
+              panganId: true,
+              harga: true,
+            },
+          })
+          .then(function (hargaPasarList) {
+            var result = panganList.map(function (pangan) {
+              var hargaList = hargaPasarList
+                .filter(function (h) {
+                  return h.panganId === pangan.id;
+                })
+                .map(function (h) {
+                  return h.harga;
+                });
+
+              var freqMap = {};
+              for (var i = 0; i < hargaList.length; i++) {
+                var harga = hargaList[i];
+                if (freqMap[harga]) {
+                  freqMap[harga]++;
+                } else {
+                  freqMap[harga] = 1;
+                }
+              }
+
+              var modus = 0;
+              var maxFreq = 0;
+              for (var hargaKey in freqMap) {
+                if (freqMap[hargaKey] > maxFreq) {
+                  maxFreq = freqMap[hargaKey];
+                  modus = parseInt(hargaKey);
+                }
+              }
+
+              var resultItem: any = {};
+              for (var key in pangan) {
+                resultItem[key] = pangan[key];
+              }
+              resultItem.rataRataHarga = modus;
+
+              return resultItem;
+            });
+
+            resolve(NextResponse.json(result, { status: 200 }));
+          })
+          .catch(function (err) {
+            console.error(err);
+            resolve(
+              NextResponse.json(
+                { status: "fail", error: err.message },
+                { status: 500 },
+              ),
+            );
+          });
+      })
+      .catch(function (err) {
+        console.error(err);
+        resolve(
+          NextResponse.json(
+            { status: "fail", error: err.message },
+            { status: 500 },
+          ),
+        );
+      });
+  });
 }

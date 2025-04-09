@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { compare } from "bcrypt";
+import { compare, compareSync, hash } from "bcrypt";
 
-export async function POST(req: Request) {
+export async function POST(req: Request, res: Response) {
   try {
     const body = await req.json();
     const { username, password } = body;
-
     const user = await prisma.user.findFirst({
       where: {
         email: username,
@@ -20,16 +19,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const passwordMatch = await compare(password, user.password);
-    if (passwordMatch) {
-      // Optional: hapus password dari response biar lebih aman
-      const { password, ...safeUser } = user;
-      return NextResponse.json(safeUser, { status: 200 });
+    if (user && (await compare(password, user.password))) {
+      console.log(user);
+      return NextResponse.json(user, { status: 200 });
     } else {
-      return NextResponse.json(
-        { status: "Username atau Password Salah" },
-        { status: 401 },
-      );
+      return null;
     }
   } catch (e: any) {
     console.error(e);
