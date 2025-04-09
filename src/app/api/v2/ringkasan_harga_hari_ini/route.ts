@@ -6,21 +6,51 @@ export async function GET(req: Request) {
     // Ambil data pangan
     const panganList = await prisma.pangan.findMany();
 
-    // Ambil rata-rata harga per panganId
-    const hargaRataRata = await prisma.hargaPasar.groupBy({
-      by: ["panganId"],
-      _avg: {
+    // Dapatkan tanggal 7 hari lalu dalam format YYYY-MM-DD
+    const now = new Date();
+    const sevenDaysAgo = new Date(now);
+    sevenDaysAgo.setDate(now.getDate() - 7);
+
+    // Format ke string 'YYYY-MM-DD'
+    const pad = (n: number) => n.toString().padStart(2, "0");
+    const sevenDaysAgoStr = `${sevenDaysAgo.getFullYear()}-${pad(sevenDaysAgo.getMonth() + 1)}-${pad(sevenDaysAgo.getDate())}`;
+
+    // Ambil harga pasar dengan filter tanggal (string comparison)
+    const hargaPasarList = await prisma.hargaPasar.findMany({
+      where: {
+        tanggal: {
+          gte: sevenDaysAgoStr, // dibandingkan sebagai string
+        },
+      },
+      select: {
+        panganId: true,
         harga: true,
       },
     });
 
-    // Gabungkan hasilnya dengan pembulatan harga
+    // Gabungkan hasilnya dengan perhitungan modus
     const result = panganList.map((pangan) => {
-      const avgHarga =
-        hargaRataRata.find((h) => h.panganId === pangan.id)?._avg.harga || 0;
+      const hargaList = hargaPasarList
+        .filter((h) => h.panganId === pangan.id)
+        .map((h) => h.harga);
+
+      const freqMap = new Map<number, number>();
+      hargaList.forEach((harga) => {
+        freqMap.set(harga, (freqMap.get(harga) || 0) + 1);
+      });
+
+      let modus = 0;
+      let maxFreq = 0;
+      for (const [harga, freq] of freqMap.entries()) {
+        if (freq > maxFreq) {
+          modus = harga;
+          maxFreq = freq;
+        }
+      }
+
       return {
         ...pangan,
-        rataRataHarga: Math.round(avgHarga), // Bulatkan harga ke bilangan bulat terdekat
+        rataRataHarga: modus,
       };
     });
 
