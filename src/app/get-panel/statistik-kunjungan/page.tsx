@@ -58,6 +58,11 @@ const StatistikKunjungan = () => {
       if (dateRange[0]) {
         // Format as YYYY-MM-DD to ensure it's treated as UTC date at 00:00:00
         startDateStr = dateRange[0].toISOString().split("T")[0];
+      } else {
+        // If no start date is selected, default to 7 days ago
+        const lastWeekDate = new Date();
+        lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+        startDateStr = lastWeekDate.toISOString().split("T")[0];
       }
 
       if (dateRange[1]) {
@@ -76,30 +81,7 @@ const StatistikKunjungan = () => {
         setData(result.data);
         setTotalPages(Math.ceil(result.total / itemsPerPage));
 
-        // Process device statistics
-        if (result.deviceStats) {
-          setDeviceStats(
-            Object.entries(result.deviceStats).map(([name, value]) => ({
-              name,
-              value,
-            })),
-          );
-        }
-
-        // Process path statistics
-        if (result.pathStats) {
-          setPathStats(
-            Object.entries(result.pathStats)
-              .sort((a, b) => (b[1] as number) - (a[1] as number))
-              .slice(0, 5)
-              .map(([name, value]) => ({
-                name: name || "Home",
-                visits: value,
-              })),
-          );
-        }
-
-        // Process date statistics
+        // Only process date statistics - we're removing the device chart
         if (result.dateStats) {
           setDateStats(
             Object.entries(result.dateStats)
@@ -157,64 +139,38 @@ const StatistikKunjungan = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Kunjungan Berdasarkan Perangkat</CardTitle>
-            </CardHeader>
-            <CardContent className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={deviceStats}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) =>
-                      `${name}: ${((percent ?? 0) * 100).toFixed(0)}%`
-                    }
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {deviceStats.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
-        </div>
-
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Trend Kunjungan Harian</CardTitle>
           </CardHeader>
-          <CardContent className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={dateStats}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="visits" fill="#82ca9d" />
-              </BarChart>
-            </ResponsiveContainer>
+          <CardContent>
+            <div className="h-64 w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={dateStats}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis />
+                  <Tooltip
+                    formatter={(value) => [`${value} kunjungan`, "Jumlah"]}
+                    labelFormatter={(label) => `Tanggal: ${label}`}
+                  />
+                  <Legend />
+                  <Bar
+                    dataKey="visits"
+                    name="Jumlah Kunjungan"
+                    fill="#82ca9d"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
 
@@ -229,7 +185,6 @@ const StatistikKunjungan = () => {
                   <TableHead className="w-[100px]">No</TableHead>
                   <TableHead>Tanggal</TableHead>
                   <TableHead>IP Address</TableHead>
-                  <TableHead>Halaman</TableHead>
                   <TableHead>Perangkat</TableHead>
                   <TableHead>Referrer</TableHead>
                 </TableRow>
@@ -265,14 +220,6 @@ const StatistikKunjungan = () => {
                         </span>
                       </TableCell>
                       <TableCell>
-                        <div
-                          className="max-w-[200px] truncate"
-                          title={item.path || "/"}
-                        >
-                          {item.path || "/"}
-                        </div>
-                      </TableCell>
-                      <TableCell>
                         <span
                           className={`inline-flex rounded-full px-2 py-1 text-xs ${
                             item.device === "mobile"
@@ -301,34 +248,26 @@ const StatistikKunjungan = () => {
               </TableBody>
             </Table>
 
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-4 flex items-center justify-end">
               <ButtonGroup>
                 <Button
-                  size={"icon"}
+                  variant="outline"
                   disabled={currentPage === 1}
                   onClick={() => handlePageChange(currentPage - 1)}
                 >
-                  <IconChevronLeft />
+                  <IconChevronLeft className="mr-1" /> Prev
                 </Button>
-                {[...Array(totalPages)].map((_, index) => (
-                  <Button
-                    key={index}
-                    variant={
-                      currentPage === index + 1 ? "secondary" : "outline"
-                    }
-                    onClick={() => handlePageChange(index + 1)}
-                  >
-                    {index + 1}
-                  </Button>
-                ))}
                 <Button
-                  size={"icon"}
-                  disabled={currentPage === totalPages}
+                  variant="outline"
+                  disabled={currentPage === totalPages || totalPages === 0}
                   onClick={() => handlePageChange(currentPage + 1)}
                 >
-                  <IconChevronRight />
+                  Next <IconChevronRight className="ml-1" />
                 </Button>
               </ButtonGroup>
+              <div className="ml-4 text-sm text-muted-foreground">
+                Halaman {currentPage} dari {totalPages || 1}
+              </div>
             </div>
           </CardContent>
         </Card>
