@@ -44,6 +44,21 @@ export async function getStatistikKunjungan({
       where: whereClause,
     });
 
+    // Get total visits (all time)
+    const totalVisits = await prisma.statistikKunjungan.count();
+
+    // Get today's visits
+    const today = new Date();
+    today.setUTCHours(0, 0, 0, 0);
+
+    const todayVisits = await prisma.statistikKunjungan.count({
+      where: {
+        createdAt: {
+          gte: today,
+        },
+      },
+    });
+
     // For raw queries, we need to format dates properly for SQL
     let whereCondition = "";
     if (startDate || endDate) {
@@ -123,6 +138,8 @@ export async function getStatistikKunjungan({
     return {
       data,
       total,
+      totalVisits,
+      todayVisits,
       deviceStats: processedDeviceStats,
       pathStats: processedPathStats,
       dateStats: processedDateStats,
@@ -132,6 +149,8 @@ export async function getStatistikKunjungan({
     return {
       data: [],
       total: 0,
+      totalVisits: 0,
+      todayVisits: 0,
       deviceStats: {},
       pathStats: {},
       dateStats: {},
