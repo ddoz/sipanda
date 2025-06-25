@@ -42,6 +42,8 @@ const StatistikKunjungan = () => {
     null,
     null,
   ]);
+  const [totalVisits, setTotalVisits] = useState(0);
+  const [todayVisits, setTodayVisits] = useState(0);
   const itemsPerPage = 10;
 
   useEffect(() => {
@@ -80,6 +82,8 @@ const StatistikKunjungan = () => {
       if (result.data) {
         setData(result.data);
         setTotalPages(Math.ceil(result.total / itemsPerPage));
+        setTotalVisits(result.totalVisits || 0);
+        setTodayVisits(result.todayVisits || 0);
 
         // Only process date statistics - we're removing the device chart
         if (result.dateStats) {
@@ -139,6 +143,40 @@ const StatistikKunjungan = () => {
         </CardTitle>
       </CardHeader>
       <CardContent>
+        <div className="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Total Kunjungan
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {totalVisits.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Jumlah seluruh kunjungan aplikasi
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-medium text-muted-foreground">
+                Kunjungan Hari Ini
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">
+                {todayVisits.toLocaleString()}
+              </div>
+              <p className="text-xs text-muted-foreground">
+                Jumlah kunjungan hari ini
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
         <Card className="mb-6">
           <CardHeader>
             <CardTitle>Trend Kunjungan Harian</CardTitle>
