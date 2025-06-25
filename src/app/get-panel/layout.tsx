@@ -145,6 +145,13 @@ function DesktopNav() {
           <Headphones className="h-5 w-5" />
         </NavItem>
 
+        <NavItem
+          href="/get-panel/statistik-kunjungan"
+          label="Statistik Kunjungan"
+        >
+          <LineChart className="h-5 w-5" />
+        </NavItem>
+
         <NavItem href="/get-panel/user" label="User">
           <Users2 className="h-5 w-5" />
         </NavItem>
@@ -228,8 +235,15 @@ function MobileNav() {
             href="/get-panel/kritik-saran"
             className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
           >
-            <Users2 className="h-5 w-5" />
+            <Headphones className="h-5 w-5" />
             Kritik Saran
+          </Link>
+          <Link
+            href="/get-panel/statistik-kunjungan"
+            className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+          >
+            <LineChart className="h-5 w-5" />
+            Statistik Kunjungan
           </Link>
           <Link
             href="/get-panel/user"

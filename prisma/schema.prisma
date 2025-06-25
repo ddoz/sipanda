@@ -206,3 +206,17 @@ model KritikSaran {
 
   @@map("kritik_saran")
 }
+
+model StatistikKunjungan {
+  id        Int      @id @default(autoincrement())
+  tanggal   DateTime @default(now())
+  ipAddress String?
+  userAgent String?
+  path      String?
+  referrer  String?
+  device    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("statistik_kunjungan")
+}
